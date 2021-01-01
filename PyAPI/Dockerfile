@@ -17,7 +17,7 @@ RUN apt-get install --yes --no-install-recommends  curl gnupg
 ADD requirements.txt /app/requirements.txt
 
 RUN ln -s /usr/include/locale.h /usr/include/xlocale.h  && \
-    pip3 install --no-index -r app/requirements.txt && \
+    pip3 install -r app/requirements.txt && \
     rm -rf /var/cache/apk/*
 
 ADD . /app
