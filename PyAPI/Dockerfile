@@ -1,7 +1,5 @@
 FROM python:3.7
 
-ADD wheelhouse /app/wheelhouse
-
 #Install system dependencies
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
