@@ -1,0 +1,40 @@
+version: "3"
+services:
+  chess_proxy:
+    image: akhilpb001/corsproxy
+    ports:
+      - "1338:1337"
+    deploy:
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 10
+        window: 30s
+
+  chess_python:
+    image: chess_python
+    container_name: chess_python
+    expose:
+      - 8200
+    ports:
+       - "8200:8200"
+    deploy:
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 10
+        window: 30s
+  chess_angular:
+    image: chess_angular
+    ports:
+       - "8888:80"
+    container_name: chess_angular
+    expose:
+      - 8888
+    deploy:
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 10
+        window: 30s
+

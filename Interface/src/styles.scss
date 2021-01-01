@@ -1,0 +1,35 @@
+.container {
+  position: absolute;
+}
+
+button.back {
+  position: relative;
+}
+
+.board {
+  position: relative;
+  z-index: 1;
+}
+
+.figures {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+img.figure {
+  position: absolute;
+  height: auto;
+  z-index: 10;
+}
+
+.square {
+  width: 20px;
+  height: 20px;
+}
+
+.winner-sign {
+  position: absolute;
+  font-size: 26px;
+  font-weight: bold;
+}
