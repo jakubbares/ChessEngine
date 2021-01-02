@@ -8,22 +8,26 @@ export function getAllIndexes(arr, val): number[] {
 }
 
 
-export function zip(arr1, arr2) {
-  return arr1.map(function(e, i) {
+export function zip(arr1, arr2): any[] {
+  return arr1.map((e, i) => {
     return [e, arr2[i]];
   });
 }
 
-export function fillShorterWithZeroes(arr1, arr2) {
+export function fillShorterWithZeroes(arr1, arr2): any[] {
   if (arr1.length === arr2.length) return [arr1, arr2];
   const longer = arr1.length < arr2.length ? arr2 : arr1;
-  const repeated = repeat([0], longer.length);
+  const repeated = repeatString([0], longer.length);
   return [longer === arr1 ? arr1 : repeated, longer === arr2 ? arr2 : repeated];
 }
 
 
-export const repeat = (item, numRepeats) => numRepeats ? item.concat(repeat(item, --numRepeats)) : [];
+export const repeatString = (item, numRepeats) => numRepeats ? item.concat(repeatString(item, --numRepeats)) : [];
 
-export function isUpperCase(character: string) {
+export const repeatItemInArray = (item, numRepeats) => {
+  return [...Array(numRepeats).keys()].map(x => item);
+}
+
+export function isUpperCase(character: string): boolean {
   return character === character.toUpperCase();
 }

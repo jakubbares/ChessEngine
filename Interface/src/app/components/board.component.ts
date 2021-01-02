@@ -26,7 +26,7 @@ import {CapturedPiecesComponent} from "./captured-pieces.component";
         <img class="figure"
              *ngFor="let figure of figureImages"
              [src]="figure.imageSrc"
-             [style.width]="drawing.board.squareLength"
+             [style.width.px]="drawing.board.squareLength"
              [style.left.px]="figure.coors.x"
              [style.top.px]="figure.coors.y"
              (click)="chooseFigure(figure)"/>
@@ -36,7 +36,7 @@ import {CapturedPiecesComponent} from "./captured-pieces.component";
            class="winner-sign">Winner is {{winner}}
       </div>
       <button class="back" (click)="backAMove()" [style.top.px]="-drawing.board.length" [style.left.px]="drawing.board.length + 20">Back</button>
-      <chess-captured-pieces></chess-captured-pieces>
+      <chess-captured-pieces [style.top.px]="-drawing.board.length + 20" [style.left.px]="drawing.board.length + 20"></chess-captured-pieces>
     </div>
   `
 })
@@ -62,30 +62,32 @@ export class BoardComponent {
       this.figureImages = this.drawing.drawPieces();
       this.getHighlights();
       this.hasWinner();
+      this.capturedPieces.update();
     });
   }
 
-  hasWinner() {
+  hasWinner(): void {
     this.apiService.getHasWinner().subscribe((winner) => {
       this.winner = winner ? winner : "";
     });
   }
 
-  backAMove() {
+  backAMove(): void {
     this.apiService.backAMove().subscribe((boardDict) => {
       this.position.loadFigurePositionsFromDict(boardDict);
       this.figureImages = this.drawing.drawPieces();
+      this.capturedPieces.update();
     });
   }
 
-  postMove() {
+  postMove(): void {
     this.figureImages = this.drawing.drawPieces();
     this.turn = this.turn === "black" ? "white" : "black";
     this.highlightsMap = {};
     this.capturedPieces.update();
   }
 
-  isOpponentFigure(letter, number) {
+  isOpponentFigure(letter, number): boolean {
     if (this.position.figuresMap.hasOwnProperty(letter + number)) {
       const position = this.position.figuresMap[letter + number];
       return position.color !== this.heroColor;
@@ -93,7 +95,7 @@ export class BoardComponent {
     return false;
   }
 
-  moveChosenFigureToField(letter, number) {
+  moveChosenFigureToField(letter, number): void {
     if (!this.highlightsMap[letter + number]) return;
     const figure = this.chosenFigure.position;
     if (figure.color !== this.turn) return;
@@ -109,19 +111,17 @@ export class BoardComponent {
           this.position.loadFigurePositionsFromDict(boardDictAfter);
           this.postMove();
           this.hasWinner();
-          //this.getHighlights();
         });
       });
     }
   }
 
-  makeComputerMoveFromUCI(moveUCI: string) {
+  makeComputerMoveFromUCI(moveUCI: string): void {
     const fromPosition = moveUCI.substr(0,2);
     const toPosition = moveUCI.substr(2,2);
     this.chosenFigure = this.figureImages.find(figureImage => {
       return figureImage.position.str === fromPosition;
     });
-    console.log(this.chosenFigure)
     delete this.position.figuresMap[fromPosition];
     const figure = this.chosenFigure.position;
     figure.fromStr(toPosition);
@@ -129,7 +129,7 @@ export class BoardComponent {
     this.postMove();
   }
 
-  getHighlights() {
+  getHighlights(): void {
     this.apiService.legalMoves().subscribe((movesUci) => {
       this.allFiguresLegalMoves = movesUci;
       this.highlightsMap = this.moves.fields.reduce((map, field) => {
@@ -143,16 +143,13 @@ export class BoardComponent {
     });
   }
 
-  chooseFigure(figure: FigureImage) {
-    if (this.turn !== figure.position.color) {
-      this.moveChosenFigureToField(figure.position.letter, figure.position.number);
-      return;
-    }
+  chooseFigure(figure: FigureImage): void {
+    this.moveChosenFigureToField(figure.position.letter, figure.position.number);
     this.chosenFigure = figure;
     this.getHighlights();
   }
 
-  boardColor(letter, number) {
+  boardColor(letter, number): string {
     const letterIndex = alphabet.indexOf(letter);
     if (!this.highlightsMap.hasOwnProperty(letter + number)) {
       return this.standardBoardColor(letterIndex, number);
@@ -169,7 +166,7 @@ export class BoardComponent {
     return this.standardBoardColor(letterIndex, number, dark, light);
   }
 
-  standardBoardColor(letterIndex, number, dark= "gray", light= "white") {
+  standardBoardColor(letterIndex, number, dark= "gray", light= "white"): string {
     if (letterIndex % 2 === 1 && number % 2 === 1) {
       return dark;
     } else if (letterIndex % 2 === 0 && number % 2 === 0) {
@@ -180,13 +177,5 @@ export class BoardComponent {
       return light;
     }
   }
-
-  findPotentialMoves(): FigurePosition[] {
-    return this.chosenFigure ?
-      this.moves.fieldsToMove(this.chosenFigure.position)
-        .filter(move => this.chosenFigure.piece === 'N' || this.moves.isMoveLegal(this.chosenFigure.position, move)) : [];
-  }
-
-
 }
 
