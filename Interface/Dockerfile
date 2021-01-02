@@ -8,15 +8,27 @@ RUN npm set progress=false && npm config set depth 0 && npm cache clean --force
 
 RUN npm i && mkdir /ng-app && cp -R ./node_modules ./ng-app
 
-RUN npm install -g @angular/cli@11.0.4
-
 ADD . /ng-app
 
+ENV PATH /ng-app/node_modules/.bin:$PATH
 
-WORKDIR /ng-app
+RUN npm install -g @angular/cli@11.0.4
 
+# generate build
+RUN ng build --output-path=dist
 
-## Build the angular app in production mode and store the artifacts in dist folder
-RUN $(npm bin)/ng build --prod
+############
+### prod ###
+############
 
-CMD ng serve --host 0.0.0.0 --prod
+# base image
+FROM nginx:1.16.0-alpine
+
+# copy artifact build from the 'build environment'
+ADD --from=build /ng-app/dist /usr/share/nginx/html
+
+# expose port 80
+EXPOSE 80
+
+# run nginx
+CMD ["nginx", "-g", "daemon off;"]
