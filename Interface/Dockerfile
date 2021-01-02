@@ -17,7 +17,7 @@ ENV PATH /ng-app/node_modules/.bin:$PATH
 RUN npm install -g @angular/cli@11.0.4
 
 # generate build
-RUN ng build --output-path=dist
+RUN ng build --output-path=dist --prod
 
 ############
 ### prod ###
