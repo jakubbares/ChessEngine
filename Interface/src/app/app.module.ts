@@ -10,12 +10,14 @@ import {DrawingService} from "./services/drawing.service";
 import {PotentialMovesService} from "./services/potential-moves.service";
 import {APIService} from "./services/api.service";
 import { HttpClientModule } from "@angular/common/http";
+import {CapturedPiecesComponent} from "./components/captured-pieces.component";
 
 
 @NgModule({
   declarations: [
     AppComponent,
     BoardComponent,
+    CapturedPiecesComponent
   ],
   imports: [
     BrowserModule,

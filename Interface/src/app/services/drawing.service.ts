@@ -1,6 +1,7 @@
 import {Injectable} from "@angular/core";
 import {alphabet, Coors, numbers, FigurePosition, FigureImage} from "../classes";
 import {FigurePositionService} from "./figure-position.service";
+import {piecesCountMap} from "../functions/board.functions";
 
 @Injectable()
 export class DrawingService {
@@ -17,6 +18,23 @@ export class DrawingService {
       const coors = this.getCoors(figure);
       return new FigureImage(figure, coors);
     });
+  }
+
+  capturedPiecesMap(): {} {
+    const beginningFigures = this.position.getInitialPositions().map(position => position.figure);
+    const currentFigures = Object.keys(this.position.figuresMap).map(field => {
+      const figure = this.position.figuresMap[field]
+      return figure.figure;
+    });
+    const beginningFiguresCountMap = piecesCountMap(beginningFigures);
+    const currentFiguresCountMap = piecesCountMap(currentFigures);
+    return Object.keys(beginningFiguresCountMap).reduce((map, figure) => {
+      const beginningCount = beginningFiguresCountMap[figure];
+      const currentCount = currentFiguresCountMap.hasOwnProperty(figure) ?
+        currentFiguresCountMap[figure] : 0;
+      map[figure] = beginningCount - currentCount;
+      return map;
+    }, {});
   }
 
   getCoors(position: FigurePosition): Coors {

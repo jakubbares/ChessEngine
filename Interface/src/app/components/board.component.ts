@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {alphabet, Color, Figure, FigureImage, FigurePosition, numbers} from "../classes";
 import {FigurePositionService} from "../services/figure-position.service";
 import {DrawingService} from "../services/drawing.service";
 import {PotentialMovesService} from "../services/potential-moves.service";
 import {APIService} from "../services/api.service";
 import {pawnReachedEndRow} from "../functions/moving.functions";
+import {CapturedPiecesComponent} from "./captured-pieces.component";
 
 @Component({
   selector: 'chess-board',
@@ -35,6 +36,7 @@ import {pawnReachedEndRow} from "../functions/moving.functions";
            class="winner-sign">Winner is {{winner}}
       </div>
       <button class="back" (click)="backAMove()" [style.top.px]="-drawing.board.length" [style.left.px]="drawing.board.length + 20">Back</button>
+      <chess-captured-pieces></chess-captured-pieces>
     </div>
   `
 })
@@ -48,6 +50,7 @@ export class BoardComponent {
   turn: Color = "white";
   heroColor: Color = "white";
   winner = "";
+  @ViewChild(CapturedPiecesComponent, { static: true }) private capturedPieces: CapturedPiecesComponent;
   constructor(public position: FigurePositionService,
               public moves: PotentialMovesService,
               private apiService: APIService,
@@ -79,6 +82,7 @@ export class BoardComponent {
     this.figureImages = this.drawing.drawPieces();
     this.turn = this.turn === "black" ? "white" : "black";
     this.highlightsMap = {};
+    this.capturedPieces.update();
   }
 
   isOpponentFigure(letter, number) {

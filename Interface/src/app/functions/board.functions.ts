@@ -1,4 +1,4 @@
-import {alphabet, FigurePosition} from "../classes";
+import {alphabet, Figure, FigurePosition} from "../classes";
 
 export function cartesian(...sets) {
   return sets.reduce((acc, set) => acc.flatMap(x => set.map(y => [ ...x, y ])), [[]]);
@@ -15,3 +15,15 @@ export function createFiguresMap(figures: FigurePosition[]): { [position: string
     return map;
   }, {});
 }
+
+
+export function piecesCountMap(figures: Figure[]) {
+  return figures.reduce((map, figure) => {
+    if (!map.hasOwnProperty(figure)) {
+      map[figure] = 0;
+    }
+    map[figure] += 1;
+    return map;
+  }, {});
+}
+
