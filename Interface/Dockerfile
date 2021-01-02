@@ -10,6 +10,8 @@ RUN npm i && mkdir /ng-app && cp -R ./node_modules ./ng-app
 
 ADD . /ng-app
 
+WORKDIR /ng-app
+
 ENV PATH /ng-app/node_modules/.bin:$PATH
 
 RUN npm install -g @angular/cli@11.0.4
