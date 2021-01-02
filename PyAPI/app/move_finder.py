@@ -11,7 +11,7 @@ class MoveFinder:
         self.is_maximizing = True
         self.depth_to_calculate = 4
         self.chess = chess
-        self.board = chess.Board()
+        self.board = chess.Board(chess960=True)
 
     @property
     def board_dict(self):
