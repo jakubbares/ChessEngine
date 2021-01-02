@@ -1,4 +1,4 @@
-FROM node:8-alpine as builder
+FROM node:15.5.0-alpine as builder
 
 ADD package.json package-lock.json ./
 
