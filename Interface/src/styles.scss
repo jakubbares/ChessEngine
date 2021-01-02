@@ -34,11 +34,19 @@ img.figure {
   font-weight: bold;
 }
 
+.captured-pieces-container {
+  display: block;
+}
+
+chess-captured-pieces {
+  position: relative;
+}
+
 .captured-piece {
   display: inline-block;
 }
 
 .captured-piece > img {
   height: auto;
-  width: 30px;
+  width: 50px;
 }
