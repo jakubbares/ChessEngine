@@ -17,7 +17,7 @@ WORKDIR /ng-app
 ## Build the angular app in production mode and store the artifacts in dist folder
 RUN $(npm bin)/ng build --prod
 
-FROM nginx:1.13.3-alpine
+FROM nginx:1.18-alpine
 
 ## Copy our default nginx config
 COPY nginx/default.conf /etc/nginx/conf.d/
