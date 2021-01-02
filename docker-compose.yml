@@ -27,7 +27,7 @@ services:
   chess_angular:
     image: chess_angular
     ports:
-       - "8888:4200"
+       - "8888:80"
     container_name: chess_angular
     expose:
       - 8888
