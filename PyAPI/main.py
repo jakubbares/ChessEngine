@@ -13,7 +13,7 @@ game = MoveFinder()
 def test_api():
     return "<h1 style='color:blue'>Hello There!</h1>"
 
-@app.route("/initialize")
+@app.route("/initialize", methods=['GET'])
 def initialize_board():
     game = MoveFinder()
     return json.dumps(game.board_dict)
@@ -41,6 +41,12 @@ def winner():
 @app.route('/move/board', methods=['GET'])
 def get_board():
     return json.dumps(game.board_dict)
+
+@app.route("/move/legal", methods=['GET'])
+def get_legal_moves():
+    generator = game.board.legal_moves
+    moves = [game.board.uci(move) for move in generator]
+    return json.dumps(moves)
 
 if __name__ == '__main__':
     app.run(host=app.config['HOST'],

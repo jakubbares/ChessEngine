@@ -9,6 +9,10 @@ export class APIService {
   constructor(private http: HttpClient) {
   }
 
+  legalMoves(): Observable<any> {
+    return this.http.get(this.baseUrl + '/legal');
+  }
+
   getHasWinner(): Observable<any> {
     return this.http.get(this.baseUrl + '/winner');
   }

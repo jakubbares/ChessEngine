@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {alphabet, Color, FigureImage, FigurePosition, numbers} from "../classes";
+import {alphabet, Color, Figure, FigureImage, FigurePosition, numbers} from "../classes";
 import {FigurePositionService} from "../services/figure-position.service";
 import {DrawingService} from "../services/drawing.service";
 import {PotentialMovesService} from "../services/potential-moves.service";
@@ -10,10 +10,10 @@ import {pawnReachedEndRow} from "../functions/moving.functions";
   selector: 'chess-board',
   template: `
     <div class="container">
-      <div *ngFor="let number of numbers" class="row board" 
+      <div *ngFor="let number of numbers" class="row board"
            [style.width.px]="drawing.board.length">
         <div *ngFor="let letter of alphabet"
-             class="col" [style.width.px]="drawing.board.squareLength" 
+             class="col" [style.width.px]="drawing.board.squareLength"
              [style.height.px]="drawing.board.squareLength"
              [style.background-color]="boardColor(letter, number)"
              (click)="moveChosenFigureToField(letter, number)">
@@ -43,7 +43,8 @@ export class BoardComponent {
   numbers = numbers.reverse();
   figureImages: FigureImage[] = [];
   chosenFigure: FigureImage;
-  highlightsMap: {};
+  allFiguresLegalMoves: string[] = [];
+  highlightsMap: {} = {};
   turn: Color = "white";
   heroColor: Color = "white";
   winner = "";
@@ -104,6 +105,7 @@ export class BoardComponent {
           this.position.loadFigurePositionsFromDict(boardDictAfter);
           this.postMove();
           this.hasWinner();
+          //this.getHighlights();
         });
       });
     }
@@ -113,8 +115,6 @@ export class BoardComponent {
     const fromPosition = moveUCI.substr(0,2);
     const toPosition = moveUCI.substr(2,2);
     this.chosenFigure = this.figureImages.find(figureImage => {
-      console.log(fromPosition)
-      console.log(figureImage)
       return figureImage.position.str === fromPosition;
     });
     console.log(this.chosenFigure)
@@ -125,18 +125,18 @@ export class BoardComponent {
     this.postMove();
   }
 
-  findPotentialMoves(): FigurePosition[] {
-    return this.chosenFigure ?
-      this.moves.fieldsToMove(this.chosenFigure.position)
-        .filter(move => this.chosenFigure.piece === 'N' || this.moves.isMoveLegal(this.chosenFigure.position, move)) : [];
-  }
-
   getHighlights() {
-    const potentialMoves = this.findPotentialMoves().map((move: FigurePosition)  => move.str);
-    this.highlightsMap = this.moves.fields.reduce((map, field) => {
-      map[field] = potentialMoves.includes(field);
-      return map;
-    }, {});
+    this.apiService.legalMoves().subscribe((movesUci) => {
+      this.allFiguresLegalMoves = movesUci;
+      this.highlightsMap = this.moves.fields.reduce((map, field) => {
+        map[field] = movesUci.filter(moveUci => {
+          const fromPosition = moveUci.substr(0, 2);
+          const toPosition = moveUci.substr(2, 2);
+          return this.chosenFigure && this.chosenFigure.position.str === fromPosition && field === toPosition;
+        }).length > 0;
+        return map;
+      }, {});
+    });
   }
 
   chooseFigure(figure: FigureImage) {
@@ -150,6 +150,9 @@ export class BoardComponent {
 
   boardColor(letter, number) {
     const letterIndex = alphabet.indexOf(letter);
+    if (!this.highlightsMap.hasOwnProperty(letter + number)) {
+      return this.standardBoardColor(letterIndex, number);
+    }
     let dark = this.highlightsMap[letter + number] ? "#729c91" : "grey";
     let light = this.highlightsMap[letter + number] ? "#d0f2f0" : "white";
     if (this.turn !== this.heroColor && this.isOpponentFigure(letter, number)) {
@@ -172,6 +175,12 @@ export class BoardComponent {
     } else if (letterIndex % 2 === 1 && number % 2 === 0) {
       return light;
     }
+  }
+
+  findPotentialMoves(): FigurePosition[] {
+    return this.chosenFigure ?
+      this.moves.fieldsToMove(this.chosenFigure.position)
+        .filter(move => this.chosenFigure.piece === 'N' || this.moves.isMoveLegal(this.chosenFigure.position, move)) : [];
   }
 
 
