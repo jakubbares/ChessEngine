@@ -33,3 +33,12 @@ img.figure {
   font-size: 26px;
   font-weight: bold;
 }
+
+.captured-piece {
+  display: inline-block;
+}
+
+.captured-piece > img {
+  height: auto;
+  width: 30px;
+}
