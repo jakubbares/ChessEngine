@@ -2,3 +2,5 @@
 /GoAPI
 /.idea
 Heuristics.txt
+*.c
+*.so

@@ -10,7 +10,7 @@ class MoveFinder:
         self.is_maximizing = True
         self.depth_to_calculate = 5
         self.chess = chess
-        self.board = chess.Board(chess960=True)
+        self.board = chess.Board()
 
     @property
     def board_dict(self):
@@ -19,6 +19,9 @@ class MoveFinder:
     @property
     def winner(self):
         return self.board.turn if self.board.is_checkmate() else None
+
+    def restart(self):
+        self.board = chess.Board()
 
     def back_a_move(self):
         self.board.pop()

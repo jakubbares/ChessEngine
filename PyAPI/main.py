@@ -14,9 +14,9 @@ game = MoveFinder()
 def test_api():
     return "<h1 style='color:blue'>Hello There!</h1>"
 
-@app.route("/initialize", methods=['GET'])
+@app.route("/restart", methods=['GET'])
 def initialize_board():
-    game = MoveFinder()
+    game.restart()
     return json.dumps(game.board_dict)
 
 @app.route('/move/hero/from/<int:field_from>/to/<int:field_to>/<int:promotion>', methods=['GET'])
@@ -35,11 +35,20 @@ def back_a_move():
     game.back_a_move()
     return json.dumps(game.board_dict)
 
-@app.route('/move/winner', methods=['GET'])
+@app.route('/settings/depth/<int:depth>', methods=['GET'])
+def set_moves_depth(depth):
+    game.depth_to_calculate = depth
+    return json.dumps(f"Depth set at {depth}")
+
+@app.route('/settings/depth', methods=['GET'])
+def get_moves_depth():
+    return json.dumps(game.depth_to_calculate)
+
+@app.route('/winner', methods=['GET'])
 def winner():
     return json.dumps(game.winner)
 
-@app.route('/move/board', methods=['GET'])
+@app.route('/board', methods=['GET'])
 def get_board():
     return json.dumps(game.board_dict)
 
