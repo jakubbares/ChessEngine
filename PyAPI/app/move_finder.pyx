@@ -2,14 +2,13 @@ import chess
 import math
 import random
 import sys
-from app.helper import evaluate_board_value, evaluate_board_value_printed
+from app.helper import evaluate_board_value
 from copy import deepcopy
-
 
 class MoveFinder:
     def __init__(self):
         self.is_maximizing = True
-        self.depth_to_calculate = 4
+        self.depth_to_calculate = 5
         self.chess = chess
         self.board = chess.Board(chess960=True)
 
@@ -23,7 +22,8 @@ class MoveFinder:
 
     def back_a_move(self):
         self.board.pop()
-        self.board.pop()
+        if bool(self.board.turn) == False:
+            self.board.pop()
 
     def make_move(self, field_from, field_to, promotion=None):
         if promotion:
@@ -32,7 +32,8 @@ class MoveFinder:
             move = self.chess.Move(field_from, field_to)
         self.board.push(move)
 
-    def calculate_minimax_score(self, depth, board, alpha, beta, is_maximizing):
+    def calculate_minimax_score(self, int depth, board, int alpha, int beta, is_maximizing):
+        cdef int best_move_score, minimax_score
         if depth == 0:
             return evaluate_board_value(board)
         if is_maximizing:
@@ -63,16 +64,16 @@ class MoveFinder:
     def find_computer_move(self):
         board = deepcopy(self.board)
         depth = deepcopy(self.depth_to_calculate)
-        best_move_score = -9999
-        alpha = -10000
-        beta = 10000
+        cdef int best_move_score = -9999
+        cdef int alpha = -10000
+        cdef int beta = 10000
+        cdef int minimax_score, value
         best_move = None
         for x in board.legal_moves:
             move = chess.Move.from_uci(str(x))
             board.push(move)
             minimax_score = self.calculate_minimax_score(depth - 1, board, alpha, beta, not self.is_maximizing)
             value = max(best_move_score, minimax_score)
-            print(str(x), value > best_move_score, value, best_move_score, minimax_score)
             if self.winner:
                 print("WINNER")
             board.pop()
@@ -82,7 +83,6 @@ class MoveFinder:
                 print(f"Best score: {best_move_score}")
                 print(f"Best move: {best_move}")
         self.board.push(best_move)
-        print("BOARD value", evaluate_board_value_printed(self.board))
         return best_move
 
 

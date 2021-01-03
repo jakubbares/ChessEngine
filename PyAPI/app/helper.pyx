@@ -1,4 +1,5 @@
-def get_piece_value(piece):
+
+def get_piece_value(str piece):
     if piece == "P" or piece == "p":
         return 10
     elif piece == "N" or piece == "n":
@@ -14,19 +15,10 @@ def get_piece_value(piece):
     else:
         return 0
 
-def evaluate_board_value(board):
-   total_sum = 0
-   for index in range(0, 64):
-       piece = board.piece_at(index)
-       own_color = bool(piece.color) if piece else False
-       piece_value = get_piece_value(piece.symbol()) if piece else 0
-       piece_value = piece_value if piece_value else 0
-       total_sum += -piece_value if own_color else piece_value
-   return total_sum
+def evaluate_board_value(board, computer_is_white=False):
+   cdef int total_sum = 0
+   cdef int index, piece_value
 
-
-def evaluate_board_value_printed(board, computer_is_white=False):
-   total_sum = 0
    for index in range(0, 64):
        piece = board.piece_at(index)
        if piece:
