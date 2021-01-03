@@ -10,13 +10,15 @@ import {PotentialMovesService} from "./services/potential-moves.service";
 import {APIService} from "./services/api.service";
 import { HttpClientModule } from "@angular/common/http";
 import {CapturedPiecesComponent} from "./components/captured-pieces.component";
+import {SettingsComponent} from "./components/settings.component";
 
 
 @NgModule({
   declarations: [
     AppComponent,
     BoardComponent,
-    CapturedPiecesComponent
+    CapturedPiecesComponent,
+    SettingsComponent
   ],
   imports: [
     BrowserModule,

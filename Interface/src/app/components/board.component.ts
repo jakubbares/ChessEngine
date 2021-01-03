@@ -1,4 +1,4 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Output, ViewChild} from '@angular/core';
 import {alphabet, Color, Figure, FigureImage, FigurePosition, numbers} from "../classes";
 import {FigurePositionService} from "../services/figure-position.service";
 import {DrawingService} from "../services/drawing.service";
@@ -31,12 +31,6 @@ import {CapturedPiecesComponent} from "./captured-pieces.component";
              [style.top.px]="figure.coors.y"
              (click)="chooseFigure(figure)"/>
       </div>
-      <div *ngIf="winner.length"
-           [style.top.px]="drawing.board.length + 20"
-           class="winner-sign">Winner is {{winner}}
-      </div>
-      <button class="back" (click)="backAMove()" [style.top.px]="-drawing.board.length" [style.left.px]="drawing.board.length + 20">Back</button>
-      <chess-captured-pieces [style.top.px]="-drawing.board.length + 20" [style.left.px]="drawing.board.length + 20"></chess-captured-pieces>
     </div>
   `
 })
@@ -49,42 +43,23 @@ export class BoardComponent {
   highlightsMap: {} = {};
   turn: Color = "white";
   heroColor: Color = "white";
-  winner = "";
-  @ViewChild(CapturedPiecesComponent, { static: true }) private capturedPieces: CapturedPiecesComponent;
+  @Output() moveMade = new EventEmitter<boolean>();
   constructor(public position: FigurePositionService,
               public moves: PotentialMovesService,
               private apiService: APIService,
               public drawing: DrawingService) {
     window["board"] = this;
-    this.getHighlights();
-    this.apiService.getFigurePositions().subscribe((boardDict) => {
-      this.position.loadFigurePositionsFromDict(boardDict);
-      this.figureImages = this.drawing.drawPieces();
-      this.getHighlights();
-      this.hasWinner();
-      this.capturedPieces.update();
-    });
   }
 
-  hasWinner(): void {
-    this.apiService.getHasWinner().subscribe((winner) => {
-      this.winner = winner ? winner : "";
-    });
-  }
-
-  backAMove(): void {
-    this.apiService.backAMove().subscribe((boardDict) => {
-      this.position.loadFigurePositionsFromDict(boardDict);
-      this.figureImages = this.drawing.drawPieces();
-      this.capturedPieces.update();
-    });
+  drawPieces(): void {
+    this.figureImages = this.drawing.drawPieces();
   }
 
   postMove(): void {
     this.figureImages = this.drawing.drawPieces();
     this.turn = this.turn === "black" ? "white" : "black";
     this.highlightsMap = {};
-    this.capturedPieces.update();
+    this.moveMade.emit(true);
   }
 
   isOpponentFigure(letter, number): boolean {
@@ -105,12 +80,9 @@ export class BoardComponent {
       this.apiService.makeHeroMove(figure.fieldNumber, moveTo.fieldNumber, isPromotion).subscribe((boardDict) => {
         this.position.loadFigurePositionsFromDict(boardDict);
         this.postMove();
-        this.hasWinner();
-        if (this.winner) return;
         this.apiService.makeComputerMove().subscribe((boardDictAfter) => {
           this.position.loadFigurePositionsFromDict(boardDictAfter);
           this.postMove();
-          this.hasWinner();
         });
       });
     }

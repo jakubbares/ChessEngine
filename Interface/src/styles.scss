@@ -2,6 +2,22 @@
   position: absolute;
 }
 
+.app {
+  display: flex;
+}
+
+.board {
+  display: block;
+}
+
+.options {
+  display: block;
+}
+
+.options > button {
+  display: block;
+}
+
 button.back {
   position: relative;
 }

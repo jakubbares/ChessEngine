@@ -5,12 +5,24 @@ import { Observable} from 'rxjs';
 
 @Injectable()
 export class APIService {
-  private baseUrl = `${environment.apiUrl}/move`;
+  private baseUrl = `${environment.apiUrl}`;
   constructor(private http: HttpClient) {
   }
 
+  restart(): Observable<any> {
+    return this.http.get(this.baseUrl + '/restart');
+  }
+
   legalMoves(): Observable<any> {
-    return this.http.get(this.baseUrl + '/legal');
+    return this.http.get(this.baseUrl + '/move/legal');
+  }
+
+  getDepth(): Observable<any> {
+    return this.http.get(this.baseUrl + '/settings/depth');
+  }
+
+  setDepth(depth: number): Observable<any> {
+    return this.http.get(this.baseUrl + '/settings/depth/' + depth);
   }
 
   getHasWinner(): Observable<any> {
@@ -22,15 +34,15 @@ export class APIService {
   }
 
   backAMove(): Observable<any> {
-    return this.http.get(this.baseUrl + '/back');
+    return this.http.get(this.baseUrl + '/move/back');
   }
 
   makeHeroMove(moveFrom: number, moveTo: number, promotion= 0): Observable<any> {
-    return this.http.get(this.baseUrl + '/hero/from/' + moveFrom + '/to/' + moveTo + '/' + promotion);
+    return this.http.get(this.baseUrl + '/move/hero/from/' + moveFrom + '/to/' + moveTo + '/' + promotion);
   }
 
   makeComputerMove(): Observable<any> {
-    return this.http.get(this.baseUrl + '/computer');
+    return this.http.get(this.baseUrl + '/move/computer');
   }
 }
 
