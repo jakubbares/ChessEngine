@@ -20,6 +20,8 @@ RUN ln -s /usr/include/locale.h /usr/include/xlocale.h  && \
     pip3 install -r app/requirements.txt && \
     rm -rf /var/cache/apk/*
 
+RUN python setup.py build_ext --inplace
+
 ADD . /app
 WORKDIR /app
 
