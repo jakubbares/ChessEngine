@@ -3,6 +3,7 @@ import {
   ViewChild
 } from '@angular/core';
 import {APIService} from "../services/api.service";
+import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'chess-change-game',
@@ -25,7 +26,8 @@ import {APIService} from "../services/api.service";
 export class ChangeGameModal implements OnInit{
   name: string;
   allGames: string[];
-  constructor(private apiService: APIService) {
+  constructor(private apiService: APIService,
+              private activeModal: NgbActiveModal) {
     window['enter_name'] = this;
   }
 
@@ -37,6 +39,7 @@ export class ChangeGameModal implements OnInit{
     if (this.apiService.gameId !== gameId) {
       this.apiService.gameIdChanged.next(gameId);
     }
+    this.activeModal.close('Game chosen');
   }
 
   loadGames(): void {
