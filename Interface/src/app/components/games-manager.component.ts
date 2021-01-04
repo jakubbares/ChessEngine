@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Output, ViewChild} from '@angular/core';
 import {APIService} from "../services/api.service";
+import {ModalService} from "../services/modal.service";
 
 
 @Component({
@@ -13,11 +14,12 @@ import {APIService} from "../services/api.service";
 })
 export class GamesManagerComponent {
   constructor(
-    public apiService: APIService
+    public apiService: APIService,
+    private modalService: ModalService
   ) {
   }
 
   changeGame(): void {
-    this.apiService.openGamesDialog();
+    this.modalService.openGamesDialog();
   }
 }

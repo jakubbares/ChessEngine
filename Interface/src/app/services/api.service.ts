@@ -4,6 +4,7 @@ import {HttpClient} from '@angular/common/http';
 import {Observable, Subject} from 'rxjs';
 import {ChangeGameModal} from "../components/change-game.component";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {ModalService} from "./modal.service";
 
 @Injectable()
 export class APIService {
@@ -13,23 +14,11 @@ export class APIService {
   private baseUrl = `${environment.apiUrl}/${this.defaultGameId}`;
   constructor(
     private http: HttpClient,
-    private modalService: NgbModal
   ) {
-    this.checkForGameName();
     this.gameId = window.localStorage.getItem("gameId");
     this.gameIdChanged.asObservable().subscribe((gameId: string) => {
       this.updateGameId(gameId);
     });
-  }
-
-  openGamesDialog(): void {
-    const modalRef = this.modalService.open(ChangeGameModal, { size: "lg", windowClass: 'enter-name-modal'});
-  }
-
-  checkForGameName(): void {
-    if (window.localStorage.getItem("gameId") === null) {
-      this.openGamesDialog();
-    }
   }
 
   updateGameId(id: string): void {

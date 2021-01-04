@@ -5,6 +5,7 @@ import {BoardComponent} from "./components/board.component";
 import {APIService} from "./services/api.service";
 import {FigurePositionService} from "./services/figure-position.service";
 import {BoardData} from "./classes";
+import {ModalService} from "./services/modal.service";
 
 @Component({
   selector: 'chess-root',
@@ -30,8 +31,11 @@ export class AppComponent implements OnInit {
   constructor(
     private apiService: APIService,
     public drawing: DrawingService,
+    private modalService: ModalService,
     public position: FigurePositionService,
-  ) {}
+  ) {
+    this.checkForGameName();
+  }
 
   ngOnInit(): void {
     this.board.getHighlights();
@@ -75,6 +79,12 @@ export class AppComponent implements OnInit {
     this.apiService.getHasWinner().subscribe((winner) => {
       this.winner = winner ? winner : "";
     });
+  }
+
+  checkForGameName(): void {
+    if (window.localStorage.getItem("gameId") === null) {
+      this.modalService.openGamesDialog();
+    }
   }
 
 }

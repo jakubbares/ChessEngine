@@ -13,6 +13,7 @@ import {CapturedPiecesComponent} from "./components/captured-pieces.component";
 import {SettingsComponent} from "./components/settings.component";
 import {GamesManagerComponent} from "./components/games-manager.component";
 import {ChangeGameModal} from "./components/change-game.component";
+import {ModalService} from "./services/modal.service";
 
 
 @NgModule({
@@ -34,6 +35,7 @@ import {ChangeGameModal} from "./components/change-game.component";
     DrawingService,
     PotentialMovesService,
     APIService,
+    ModalService,
   ],
   bootstrap: [AppComponent],
   entryComponents: [
