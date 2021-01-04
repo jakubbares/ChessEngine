@@ -7,18 +7,19 @@ import {APIService} from "../services/api.service";
 @Component({
   selector: 'chess-change-game',
   template: `
-    <div class="row">
-      <div class="col">
-        <span>Enter your name:</span>
-        <input [(ngModel)]="name" type="text"/>
-        <button (click)="changeGame(name)">Create new game</button>
-      </div>
-      <div class="col">
-        <div>Available games</div>
-        <button class="game-name" *ngFor="let game of allGames" (click)="changeGame(game)">{{game}}</button>
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <span>Enter your name:</span>
+          <input [(ngModel)]="name" type="text"/>
+          <button (click)="changeGame(name)">Create new game</button>
+        </div>
+        <div class="col">
+          <div>Available games:</div>
+          <button class="game-name" *ngFor="let game of allGames" (click)="changeGame(game)">{{game}}</button>
+        </div>
       </div>
     </div>
-
   `
 })
 export class ChangeGameModal implements OnInit{

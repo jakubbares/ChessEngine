@@ -10,7 +10,7 @@ import {CapturedPiecesComponent} from "./captured-pieces.component";
 @Component({
   selector: 'chess-board',
   template: `
-    <div class="container">
+    <div class="absolute-container container">
       <div *ngFor="let number of numbers" class="row board"
            [style.width.px]="drawing.board.length">
         <div *ngFor="let letter of alphabet"
