@@ -5,8 +5,8 @@ import {APIService} from "../services/api.service";
 @Component({
   selector: 'chess-games-manager',
   template: `
-    <div class="restart">
-      <span>Game: {{apiService.gameId}}</span>
+    <div class="games-manager">
+      <div>Game: {{apiService.gameId}}</div>
       <button (click)="changeGame()">Change game</button>
     </div>
   `

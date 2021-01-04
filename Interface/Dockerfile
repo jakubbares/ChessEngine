@@ -8,8 +8,6 @@ RUN npm set progress=false && npm config set depth 0 && npm cache clean --force
 
 RUN npm i && mkdir /ng-app && cp -R ./node_modules ./ng-app
 
-RUN npm install -g @angular/cli@11.0.4
-
 ADD . /ng-app
 
 WORKDIR /ng-app
@@ -17,7 +15,7 @@ WORKDIR /ng-app
 ENV PATH /ng-app/node_modules/.bin:$PATH
 
 # generate build
-RUN ng build --output-path=dist --prod
+RUN npm run build --output-path=dist --prod
 
 ############
 ### prod ###
