@@ -15,7 +15,7 @@ WORKDIR /ng-app
 ENV PATH /ng-app/node_modules/.bin:$PATH
 
 # generate build
-RUN npm run build --output-path=dist --prod
+RUN $(npm bin)/ng build --prod
 
 ############
 ### prod ###
