@@ -8,7 +8,7 @@ from copy import deepcopy
 class MoveFinder:
     def __init__(self):
         self.is_maximizing = True
-        self.depth_to_calculate = 5
+        self.depth_to_calculate = 4
         self.chess = chess
         self.board = chess.Board()
 
