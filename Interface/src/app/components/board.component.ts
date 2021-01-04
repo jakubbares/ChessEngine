@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Output, ViewChild} from '@angular/core';
-import {alphabet, Color, Figure, FigureImage, FigurePosition, numbers} from "../classes";
+import {alphabet, BoardData, Color, Figure, FigureImage, FigurePosition, numbers} from "../classes";
 import {FigurePositionService} from "../services/figure-position.service";
 import {DrawingService} from "../services/drawing.service";
 import {PotentialMovesService} from "../services/potential-moves.service";
@@ -49,6 +49,24 @@ export class BoardComponent {
               private apiService: APIService,
               public drawing: DrawingService) {
     window["board"] = this;
+    this.apiService.gameIdChanged.asObservable().subscribe((gameId: string) => {
+      this.apiService.getOrCreateGame(gameId).subscribe((data: BoardData) => {
+        this.position.loadFigurePositionsFromDict(data.board);
+        this.turn = data.turn;
+        this.figureImages = this.drawing.drawPieces();
+      });
+    });
+    setInterval(() => {
+      // this.update();
+    }, 2000);
+  }
+
+  update(): void {
+    this.apiService.getFigurePositions().subscribe((data: BoardData) => {
+      this.position.loadFigurePositionsFromDict(data.board);
+      this.turn = data.turn;
+      this.figureImages = this.drawing.drawPieces();
+    });
   }
 
   drawPieces(): void {
@@ -77,11 +95,11 @@ export class BoardComponent {
     if (figure.color === this.heroColor) {
       const moveTo = new FigurePosition().fromStr(letter + number);
       const isPromotion = pawnReachedEndRow(figure, number) ? 1 : 0;
-      this.apiService.makeHeroMove(figure.fieldNumber, moveTo.fieldNumber, isPromotion).subscribe((boardDict) => {
-        this.position.loadFigurePositionsFromDict(boardDict);
+      this.apiService.makeHeroMove(figure.fieldNumber, moveTo.fieldNumber, isPromotion).subscribe((data: BoardData) => {
+        this.position.loadFigurePositionsFromDict(data.board);
         this.postMove();
-        this.apiService.makeComputerMove().subscribe((boardDictAfter) => {
-          this.position.loadFigurePositionsFromDict(boardDictAfter);
+        this.apiService.makeComputerMove().subscribe((dataAfter: BoardData) => {
+          this.position.loadFigurePositionsFromDict(dataAfter.board);
           this.postMove();
         });
       });

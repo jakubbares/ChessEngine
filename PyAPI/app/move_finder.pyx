@@ -13,6 +13,11 @@ class MoveFinder:
         self.board = chess.Board()
 
     @property
+    def board_data(self):
+        return {"board": self.board_dict,
+                "turn": "white" if bool(self.board.turn) else "black"}
+
+    @property
     def board_dict(self):
         return {field: piece.symbol() for field, piece in self.board.piece_map().items()}
 

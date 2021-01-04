@@ -96,3 +96,8 @@ export class FigureImage {
     this.imageSrc = `/assets/images/pieces/${position.figure}.png`;
   }
 }
+
+export interface BoardData {
+  board: {};
+  turn: Color;
+}

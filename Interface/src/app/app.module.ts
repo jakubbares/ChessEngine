@@ -11,6 +11,8 @@ import {APIService} from "./services/api.service";
 import { HttpClientModule } from "@angular/common/http";
 import {CapturedPiecesComponent} from "./components/captured-pieces.component";
 import {SettingsComponent} from "./components/settings.component";
+import {GamesManagerComponent} from "./components/games-manager.component";
+import {EnterNameModal} from "./components/enter-name.component";
 
 
 @NgModule({
@@ -18,7 +20,9 @@ import {SettingsComponent} from "./components/settings.component";
     AppComponent,
     BoardComponent,
     CapturedPiecesComponent,
-    SettingsComponent
+    SettingsComponent,
+    GamesManagerComponent,
+    EnterNameModal
   ],
   imports: [
     BrowserModule,
@@ -31,6 +35,9 @@ import {SettingsComponent} from "./components/settings.component";
     PotentialMovesService,
     APIService,
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [
+    EnterNameModal
+  ],
 })
 export class AppModule { }

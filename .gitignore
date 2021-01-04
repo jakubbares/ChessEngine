@@ -4,3 +4,5 @@
 Heuristics.txt
 *.c
 *.so
+/chess_cython.egg-info
+/build*

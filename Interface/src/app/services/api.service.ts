@@ -1,12 +1,50 @@
 import {Injectable} from "@angular/core";
 import {environment} from "../../environments/environment";
 import {HttpClient} from '@angular/common/http';
-import { Observable} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
+import {EnterNameModal} from "../components/enter-name.component";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 
 @Injectable()
 export class APIService {
-  private baseUrl = `${environment.apiUrl}`;
-  constructor(private http: HttpClient) {
+  gameIdChanged = new Subject<string>();
+  gameId: string;
+  defaultGameId = "default";
+  private baseUrl = `${environment.apiUrl}/${this.defaultGameId}`;
+  constructor(
+    private http: HttpClient,
+    private modalService: NgbModal
+  ) {
+    this.checkForGameName();
+    this.gameId = window.localStorage.getItem("gameId");
+    this.gameIdChanged.asObservable().subscribe((gameId: string) => {
+      this.updateGameId(gameId);
+    });
+  }
+
+  openGamesDialog(): void {
+    const modalRef = this.modalService.open(EnterNameModal, { size: "lg", windowClass: 'enter-name-modal'});
+  }
+
+  checkForGameName(): void {
+    if (window.localStorage.getItem("gameId") === null) {
+      this.openGamesDialog();
+    }
+  }
+
+  updateGameId(id: string): void {
+    this.gameId = id;
+    this.baseUrl = `${environment.apiUrl}/${this.gameId}`;
+    window.localStorage.setItem("gameId", id);
+  }
+
+  getAllGames(): Observable<any> {
+    return this.http.get(`${environment.apiUrl}/games`);
+  }
+
+  getOrCreateGame(gameId: string): Observable<any> {
+    this.updateGameId(gameId);
+    return this.http.get(this.baseUrl + '/game/get-or-create');
   }
 
   restart(): Observable<any> {

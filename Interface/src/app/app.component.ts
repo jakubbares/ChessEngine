@@ -4,6 +4,7 @@ import {CapturedPiecesComponent} from "./components/captured-pieces.component";
 import {BoardComponent} from "./components/board.component";
 import {APIService} from "./services/api.service";
 import {FigurePositionService} from "./services/figure-position.service";
+import {BoardData} from "./classes";
 
 @Component({
   selector: 'chess-root',
@@ -13,7 +14,7 @@ import {FigurePositionService} from "./services/figure-position.service";
         <chess-board (moveMade)="moveMade()"></chess-board>
       </div>
       <div class="options">
-        <button (dblclick)="restart()">Restart</button>
+        <chess-games-manager></chess-games-manager>
         <div *ngIf="winner.length" class="winner-sign">Winner is {{winner}}</div>
         <chess-settings></chess-settings>
         <button class="back" (click)="backAMove()">Back</button>
@@ -44,11 +45,14 @@ export class AppComponent implements OnInit {
   }
 
   restart(): void {
-    this.apiService.restart().subscribe((boardDict) => {
-      this.position.loadFigurePositionsFromDict(boardDict);
-      this.board.drawPieces();
-      this.board.getHighlights();
-      this.capturedPieces.update();
+    this.apiService.gameIdChanged.subscribe((gameId) => {
+      this.apiService.getOrCreateGame(gameId).subscribe((data: BoardData) => {
+        this.position.loadFigurePositionsFromDict(data.board);
+        this.board.turn = data.turn;
+        this.board.drawPieces();
+        this.board.getHighlights();
+        this.capturedPieces.update();
+      });
     });
   }
 
@@ -57,8 +61,9 @@ export class AppComponent implements OnInit {
   }
 
   backAMove(): void {
-    this.apiService.backAMove().subscribe((boardDict) => {
-      this.position.loadFigurePositionsFromDict(boardDict);
+    this.apiService.backAMove().subscribe((data: BoardData) => {
+      this.position.loadFigurePositionsFromDict(data.board);
+      this.board.turn = data.turn;
       this.board.drawPieces();
       this.board.getHighlights();
       this.capturedPieces.update();
