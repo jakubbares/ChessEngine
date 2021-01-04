@@ -5,7 +5,7 @@ import {
 import {APIService} from "../services/api.service";
 
 @Component({
-  selector: 'chess-enter-name',
+  selector: 'chess-change-game',
   template: `
     <div class="row">
       <div class="col">
@@ -15,13 +15,13 @@ import {APIService} from "../services/api.service";
       </div>
       <div class="col">
         <div>Available games</div>
-        <div *ngFor="let game of allGames" (click)="changeGame(game)">{{game}}</div>
+        <button class="game-name" *ngFor="let game of allGames" (click)="changeGame(game)">{{game}}</button>
       </div>
     </div>
 
   `
 })
-export class EnterNameModal implements OnInit{
+export class ChangeGameModal implements OnInit{
   name: string;
   allGames: string[];
   constructor(private apiService: APIService) {

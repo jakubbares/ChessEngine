@@ -12,7 +12,7 @@ import { HttpClientModule } from "@angular/common/http";
 import {CapturedPiecesComponent} from "./components/captured-pieces.component";
 import {SettingsComponent} from "./components/settings.component";
 import {GamesManagerComponent} from "./components/games-manager.component";
-import {EnterNameModal} from "./components/enter-name.component";
+import {ChangeGameModal} from "./components/change-game.component";
 
 
 @NgModule({
@@ -22,7 +22,7 @@ import {EnterNameModal} from "./components/enter-name.component";
     CapturedPiecesComponent,
     SettingsComponent,
     GamesManagerComponent,
-    EnterNameModal
+    ChangeGameModal
   ],
   imports: [
     BrowserModule,
@@ -37,7 +37,7 @@ import {EnterNameModal} from "./components/enter-name.component";
   ],
   bootstrap: [AppComponent],
   entryComponents: [
-    EnterNameModal
+    ChangeGameModal
   ],
 })
 export class AppModule { }

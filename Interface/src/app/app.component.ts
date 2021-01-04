@@ -35,8 +35,9 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.board.getHighlights();
-    this.apiService.getFigurePositions().subscribe((boardDict) => {
-      this.position.loadFigurePositionsFromDict(boardDict);
+    this.apiService.getFigurePositions().subscribe((data: BoardData) => {
+      this.position.loadFigurePositionsFromDict(data.board);
+      this.board.turn = data.turn;
       this.board.drawPieces();
       this.board.getHighlights();
       this.hasWinner();

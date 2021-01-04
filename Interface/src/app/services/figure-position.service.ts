@@ -7,13 +7,13 @@ import {pawnReachedEndRow} from "../functions/moving.functions";
 
 @Injectable()
 export class FigurePositionService {
-  figuresMap:  { [position: string]: FigurePosition; } = {};
+  figuresMap: { [position: string]: FigurePosition; } = {};
 
   constructor() {
     this.figuresMap = createFiguresMap(this.getInitialPositions());
   }
 
-  loadFigurePositionsFromDict(dict) {
+  loadFigurePositionsFromDict(dict): void {
     const fieldNumbers = Object.keys(dict);
     this.figuresMap = fieldNumbers.reduce((map, fieldNumber) => {
       const figurePosition = new FigurePosition();
@@ -44,7 +44,7 @@ export class FigurePositionService {
     return [...blackInitial, ...whiteInitial];
   }
 
-  generatePawns(color: Color) {
+  generatePawns(color: Color): FigurePosition[] {
     const row = color === "white" ? 2 : 7;
     const figure = color === "white" ? "wP" : "bP";
     return alphabet.map(letter => {
@@ -52,7 +52,7 @@ export class FigurePositionService {
     });
   }
 
-  generateFigure(figure: Figure) {
+  generateFigure(figure: Figure): FigurePosition[] {
     const color: Color = this.getColor(figure);
     const row = color === "white" ? 1 : 8;
     const piece = figure[1];

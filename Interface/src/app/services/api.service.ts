@@ -2,7 +2,7 @@ import {Injectable} from "@angular/core";
 import {environment} from "../../environments/environment";
 import {HttpClient} from '@angular/common/http';
 import {Observable, Subject} from 'rxjs';
-import {EnterNameModal} from "../components/enter-name.component";
+import {ChangeGameModal} from "../components/change-game.component";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 
 @Injectable()
@@ -23,7 +23,7 @@ export class APIService {
   }
 
   openGamesDialog(): void {
-    const modalRef = this.modalService.open(EnterNameModal, { size: "lg", windowClass: 'enter-name-modal'});
+    const modalRef = this.modalService.open(ChangeGameModal, { size: "lg", windowClass: 'enter-name-modal'});
   }
 
   checkForGameName(): void {

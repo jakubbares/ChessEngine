@@ -42,13 +42,14 @@ export class FigurePosition {
     this.color = figure[0] === "w" ? "white" : "black";
   }
 
-  fromFigureLetter(figureLetter: string) {
+  fromFigureLetter(figureLetter: string): FigurePosition {
     const figure = isUpperCase(figureLetter) ? "w" + figureLetter : "b" + figureLetter.toUpperCase();
     this.figure = figures.find(fig => fig === figure);
     this.color = this.figure[0] === "w" ? "white" : "black";
+    return this;
   }
 
-  fromCoor(letterCoor, numberCoor) {
+  fromCoor(letterCoor, numberCoor): FigurePosition {
     if (!letterCoor || !numberCoor) return null;
     this.letter = alphabet[parseInt(letterCoor) - 1];
     this.letterIndex = parseInt(letterCoor);
@@ -58,7 +59,7 @@ export class FigurePosition {
     return this;
   }
 
-  fromStr(str: string) {
+  fromStr(str: string): FigurePosition {
     if (!str) return null;
     this.letter = str[0];
     this.letterIndex = alphabet.indexOf(this.letter) + 1;
@@ -68,7 +69,7 @@ export class FigurePosition {
     return this;
   }
 
-  fromFieldNumber(num: number) {
+  fromFieldNumber(num: number): FigurePosition {
     if (!num) return null;
     this.number = Math.ceil((num + 1) / 8);
     const index = (num + 1) % 8;
