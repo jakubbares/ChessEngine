@@ -158,13 +158,13 @@ export class BoardComponent {
 
   standardBoardColor(letterIndex, number, dark= "gray", light= "white"): string {
     if (letterIndex % 2 === 1 && number % 2 === 1) {
-      return dark;
+      return light;
     } else if (letterIndex % 2 === 0 && number % 2 === 0) {
-      return dark;
+      return light;
     } else if (letterIndex % 2 === 0 && number % 2 === 1) {
-      return light;
+      return dark;
     } else if (letterIndex % 2 === 1 && number % 2 === 0) {
-      return light;
+      return dark;
     }
   }
 }
